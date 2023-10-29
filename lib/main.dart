@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,8 +12,27 @@ void main() {
   ));
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  String labelText = 'enable 85 percentage battery ?';
+
+  final Battery _battery = Battery();
+
+  Future<void> showBatteryPercentage() async{
+
+    final batteryLevel = await _battery.batteryLevel;
+
+    setState(() {
+      labelText = batteryLevel.toString();
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +45,12 @@ class Home extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           children: [
-            SizedBox(height: 180),
-            Text('enable 85 percentage battery ?',
-            style: TextStyle(
+            const SizedBox(height: 180),
+            Text(labelText,
+            style: const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
               letterSpacing: 2.0,
@@ -36,10 +58,13 @@ class Home extends StatelessWidget {
               fontFamily: 'SometypeMono',
             ),
             ),
-            TurnOnSwitch(),
+            const TurnOnSwitch(),
           ],
         )
       ),
+      floatingActionButton: FloatingActionButton(onPressed: ()=>{
+        showBatteryPercentage(),
+      }),
     );
   }
 }
