@@ -22,18 +22,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String labelText = 'enable 85 percentage battery ?';
 
-  final Battery _battery = Battery();
-
-  Future<void> showBatteryPercentage() async{
-
-    final batteryLevel = await _battery.batteryLevel;
-
-    setState(() {
-      labelText = batteryLevel.toString();
-    });
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,12 +47,10 @@ class _HomeState extends State<Home> {
             ),
             ),
             const TurnOnSwitch(),
+            const BatteryPercentageText(),
           ],
         )
       ),
-      floatingActionButton: FloatingActionButton(onPressed: ()=>{
-        showBatteryPercentage(),
-      }),
     );
   }
 }
@@ -88,5 +74,60 @@ class _TurnOnSwitchState extends State<TurnOnSwitch> {
           light = value;
         });
     });
+  }
+}
+
+class BatteryPercentageText extends StatefulWidget {
+  const BatteryPercentageText({super.key});
+
+  @override
+  State<BatteryPercentageText> createState() => _BatteryPercentageTextState();
+}
+
+class _BatteryPercentageTextState extends State<BatteryPercentageText> {
+  String batteryPercentage = 'battery percentage comes here...';
+
+  final Battery _battery = Battery();
+  late Timer timer;
+
+  Future<void> showBatteryPercentage() async{
+
+    final batteryLevel = await _battery.batteryLevel;
+
+    setState(() {
+      batteryPercentage = 'Battery now:$batteryLevel';
+    });
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      showBatteryPercentage();
+    });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(batteryPercentage,
+        style: const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 2.0,
+          color: Colors.grey,
+          fontFamily: 'SomeTypeMono',
+        ),
+        )
+      ],
+    );
   }
 }
