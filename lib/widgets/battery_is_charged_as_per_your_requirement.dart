@@ -78,13 +78,3 @@ class _BatteryIsChargedAsPerYourRequirementState extends State<BatteryIsChargedA
     );
   }
 }
-
-// if('$batteryState' == 'BatteryState.discharging'){
-//           isChargedOrNot = 'Connect the charger'
-//         }else if(intBatteryPercentage == 100){
-//           isChargedOrNot = 'Battery is Charged to full'
-//         }else if('$batteryState' == 'BatteryState.charging' && intBatteryPercentage! <= intSetBatteryPercentage!){
-//           isChargedOrNot = 'Battery is now over $setBatteryPercentage, please remove the charger!'
-//         }else{
-//           isChargedOrNot = 'Battery is now charging and is at $batteryPercentage%'
-//         }
