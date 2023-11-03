@@ -29,7 +29,7 @@ class _BatteryPercentageTextState extends State<BatteryPercentageText> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       showBatteryPercentage();
     });
   }

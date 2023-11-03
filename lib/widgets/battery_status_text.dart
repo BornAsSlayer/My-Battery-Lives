@@ -30,6 +30,7 @@ class _BatteryStatusTextState extends State<BatteryStatusText> {
     battery.batteryState.then(updateBatteryState);
     batteryStateSubscription = battery.onBatteryStateChanged.listen(updateBatteryState);
   }
+  
   @override
   Widget build(BuildContext context) {
     return Column(

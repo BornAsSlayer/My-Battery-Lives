@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_battery_lives/widgets/Battery_Percentage_Text.dart';
+import 'package:my_battery_lives/widgets/battery_is_charged_as_per_your_requirement.dart';
 import 'package:my_battery_lives/widgets/battery_status_text.dart';
 
 void main() {
@@ -48,6 +49,7 @@ class _HomeState extends State<Home> {
             const TurnOnSwitch(),
             const BatteryPercentageText(),
             const BatteryStatusText(),
+            const BatteryIsChargedAsPerYourRequirement(),
           ],
         )
       ),
