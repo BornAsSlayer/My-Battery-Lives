@@ -17,13 +17,10 @@ class _BatteryPercentageTextState extends State<BatteryPercentageText> {
   late Timer timer;
 
   Future<void> showBatteryPercentage() async{
-
     final batteryLevel = await _battery.batteryLevel;
-
     setState(() {
       batteryPercentage = 'Battery now:$batteryLevel';
     });
-
   }
 
   @override

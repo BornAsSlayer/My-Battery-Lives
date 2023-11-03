@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:battery_plus/battery_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class BatteryIsChargedAsPerYourRequirement extends StatefulWidget {
@@ -12,22 +11,20 @@ class BatteryIsChargedAsPerYourRequirement extends StatefulWidget {
 }
 
 class _BatteryIsChargedAsPerYourRequirementState extends State<BatteryIsChargedAsPerYourRequirement> {
-  String isChargedOrNot = "";
-  String batteryPercentage = "";
-  String setBatteryPercentage = "30";
-
   final Battery _battery = Battery();
   late Timer timer;
+  int intBatteryLevel=0;
+  String isChargedOrNot = '';
+  int setBatteryPercentage = 85;
+  
   BatteryState? batteryState;
   StreamSubscription <BatteryState>? batteryStateSubscription;
 
-
-  Future<void> showBatteryPercentage() async{
+  Future<void> getBatteryLevel() async{
     final batteryLevel = await _battery.batteryLevel;
     setState(() {
-      batteryPercentage = '$batteryLevel';
+      intBatteryLevel = batteryLevel;
     });
-
   }
 
   void updateBatteryState(BatteryState state){
@@ -40,33 +37,20 @@ class _BatteryIsChargedAsPerYourRequirementState extends State<BatteryIsChargedA
   @override
   void initState() {
     super.initState();
-    _battery.batteryState.then(updateBatteryState);
-    batteryStateSubscription = _battery.onBatteryStateChanged.listen(updateBatteryState);
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      int? intBatteryPercentage = int.tryParse(batteryPercentage); 
-      int? intSetBatteryPercentage = int.tryParse(setBatteryPercentage);
-
-      Future<void> getBatteryPercentage() async{
-        try {
-          await showBatteryPercentage();
-        } catch (e) {
-          if (kDebugMode) {
-            print(e);
-          }
-        }
-      }
-
-      getBatteryPercentage().then((_) => {
-        if('$batteryState' == 'BatteryState.discharging'){
-          isChargedOrNot = 'Connect the charger'
-        }else if(intBatteryPercentage == 100){
-          isChargedOrNot = 'Battery is Charged to full'
-        }else if('$batteryState' == 'BatteryState.charging' && intBatteryPercentage! <= intSetBatteryPercentage!){
-          isChargedOrNot = 'Battery is now over $setBatteryPercentage, please remove the charger!'
+      getBatteryLevel();
+      _battery.batteryState.then(updateBatteryState);
+      batteryStateSubscription = _battery.onBatteryStateChanged.listen(updateBatteryState);
+  
+      if('$batteryState' == 'BatteryState.discharging' && intBatteryLevel < 40){
+          isChargedOrNot = 'Connect the charger';
+        }else if(intBatteryLevel == 100){
+          isChargedOrNot = 'Battery is Charged to full';
+        }else if('$batteryState' == 'BatteryState.charging' && setBatteryPercentage <= intBatteryLevel){
+          isChargedOrNot = 'Battery is now over $setBatteryPercentage, please remove the charger!';
         }else{
-          isChargedOrNot = 'Battery is now charging and is at $batteryPercentage%'
+          isChargedOrNot = 'Battery is now charging and is at $intBatteryLevel%';
         }
-      });
     });
   }
 
@@ -75,6 +59,7 @@ class _BatteryIsChargedAsPerYourRequirementState extends State<BatteryIsChargedA
     timer.cancel();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -93,3 +78,13 @@ class _BatteryIsChargedAsPerYourRequirementState extends State<BatteryIsChargedA
     );
   }
 }
+
+// if('$batteryState' == 'BatteryState.discharging'){
+//           isChargedOrNot = 'Connect the charger'
+//         }else if(intBatteryPercentage == 100){
+//           isChargedOrNot = 'Battery is Charged to full'
+//         }else if('$batteryState' == 'BatteryState.charging' && intBatteryPercentage! <= intSetBatteryPercentage!){
+//           isChargedOrNot = 'Battery is now over $setBatteryPercentage, please remove the charger!'
+//         }else{
+//           isChargedOrNot = 'Battery is now charging and is at $batteryPercentage%'
+//         }
