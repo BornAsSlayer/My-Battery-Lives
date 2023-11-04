@@ -1,6 +1,6 @@
 # My Battery Lives
 
-A Flutter app to make sure battery doesn't charge beyond a certain percentage of charge.
+A Flutter app to make sure the battery doesn't charge beyond a certain percentage of charge for android.
 
 ## Getting Started
 
