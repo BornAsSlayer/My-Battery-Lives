@@ -16,6 +16,7 @@ class _BatteryIsChargedAsPerYourRequirementState extends State<BatteryIsChargedA
   int intBatteryLevel=0;
   String isChargedOrNot = '';
   int setBatteryPercentage = 85;
+  bool boolShowAlert = true;
   
   BatteryState? batteryState;
   StreamSubscription <BatteryState>? batteryStateSubscription;
@@ -34,6 +35,20 @@ class _BatteryIsChargedAsPerYourRequirementState extends State<BatteryIsChargedA
     });
   }
 
+  void _showAlert(BuildContext buildContext){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: const Text('Remove the Charger!'),
+        content: Text('Battery is now over $setBatteryPercentage, please remove the charger!'),
+        actions: <Widget>[
+          TextButton(onPressed: (){
+            Navigator.of(context).pop();
+          }, child: const Text('Cancel!'))
+        ],
+      );
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,12 +59,19 @@ class _BatteryIsChargedAsPerYourRequirementState extends State<BatteryIsChargedA
   
       if('$batteryState' == 'BatteryState.discharging' && intBatteryLevel < 40){
           isChargedOrNot = 'Connect the charger';
+          boolShowAlert = true;
         }else if(intBatteryLevel == 100){
           isChargedOrNot = 'Battery is Charged to full';
+          boolShowAlert = true;
         }else if('$batteryState' == 'BatteryState.charging' && setBatteryPercentage <= intBatteryLevel){
           isChargedOrNot = 'Battery is now over $setBatteryPercentage, please remove the charger!';
+          if(boolShowAlert){
+            _showAlert(context);
+            boolShowAlert = false;
+          }
         }else{
           isChargedOrNot = 'Battery is now charging and is at $intBatteryLevel%';
+          boolShowAlert = true;
         }
     });
   }
