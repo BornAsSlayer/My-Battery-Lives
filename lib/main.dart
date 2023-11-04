@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_battery_lives/widgets/Battery_Percentage_Text.dart';
 import 'package:my_battery_lives/widgets/battery_is_charged_as_per_your_requirement.dart';
-import 'package:my_battery_lives/widgets/battery_status_text.dart';
+import 'package:my_battery_lives/widgets/turn_on_switch.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -20,7 +20,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String labelText = 'enable 85 percentage battery ?';
+  String labelText = 'enable overcharge notification?';
 
   @override
   Widget build(BuildContext context) {
@@ -38,43 +38,23 @@ class _HomeState extends State<Home> {
           children: [
             const SizedBox(height: 180),
             Text(labelText,
-            style: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2.0,
-              color: Colors.grey,
-              fontFamily: 'SometypeMono',
+              style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.0,
+                color: Colors.grey,
+                fontFamily: 'SometypeMono',
+              ),
             ),
+            const SizedBox(
+              height: 20.0,
             ),
-            const TurnOnSwitch(),
+            const TurnOnSwitchAndSlider(),
             const BatteryPercentageText(),
-            const BatteryStatusText(),
             const BatteryIsChargedAsPerYourRequirement(),
           ],
         )
       ),
     );
-  }
-}
-
-class TurnOnSwitch extends StatefulWidget {
-  const TurnOnSwitch({super.key});
-
-  @override
-  State<TurnOnSwitch> createState() => _TurnOnSwitchState();
-}
-
-class _TurnOnSwitchState extends State<TurnOnSwitch> {
-  bool light = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Switch(
-      value: light,
-      onChanged: (bool value){
-        setState(() {
-          light = value;
-        });
-    });
   }
 }
